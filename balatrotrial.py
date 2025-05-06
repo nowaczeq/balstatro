@@ -3,6 +3,7 @@ import handtests
 from classes import Card
 from hand_types import create_hand_types
 import sys
+import ante_scores
 
 
 HAND_TYPES = create_hand_types()
@@ -10,6 +11,8 @@ DECK_SIZE = 52
 HAND_SIZE = 8
 DISCARDS = 3
 DISCARD_SIZE = 5
+
+random.seed(100)
 
 def main():
     print("BALSTATRO MAIN MENU")
@@ -70,30 +73,16 @@ def main():
         if command == "pair_win":
             check_score()
         
-        if command == "ante1":
-            requirement = 300
-            for name in HAND_TYPES:
-                score = HAND_TYPES[name]
-                card_chips_required = (requirement // score.mult) - score.chips
-                # Establish maximum score accomodating for rank limitations of some cards
-                if name == "TWO_PAIR":
-                    # Maximum: two aces and two face cards/tens
-                    maximum_score = (11 * 2) + (10 * 2)
-                elif name == "FULL_HOUSE":
-                    # Maximum: three aces and two face cards/tens
-                    maximum_score = (11 * 3) + (10 * 2)
-                elif name == "STRAIGHT" or name == "STRAIGHT_FLUSH":
-                    # Maximum: royal straight (11 + 10 * 4)
-                    maximum_score = 51
-                else:
-                    # Maximum: all aces
-                    maximum_score = score.cards * 11
-                if card_chips_required > maximum_score:
-                    print(f"A {name} cannot score, as the maximum possible score is {maximum_score}")
-                elif card_chips_required > 0:
-                    print(f"A {name} would require a card chip total of {card_chips_required}")
-                else:
-                    print(f"{name} scores required chips on its own")
+        if command == "ante1_blind_scores":
+            blinds = {
+                "SMALL_BLIND": 300,
+                "BIG_BLIND": 450,
+                "BOSS_BLIND": 600
+            }
+            for name, requirement in blinds.items():
+                print(f"ANTE 1 {name}:")
+                ante_scores.calculate_ante_scores(requirement)
+                print("")
 
         print("")
         command = ""
@@ -105,7 +94,7 @@ def usage():
     print("exit : terminate program")
     print("pair_prob : display likelihood of drawing a pair for each card")
     print("pair_win : display score of a pair for each card in your hand")
-    print("ante1 : display chips that cards have to add up to to win the first ante in 1 hand (for each hand type)")
+    print("ante1_blind_scores : display chips that cards have to add up to to win the first ante blinds in 1 hand (for each hand type)")
     return True
 
 def check_score():
@@ -140,7 +129,7 @@ def check_score():
     display_cards(played_hand)
     print("")
     
-    wins = calculate_score(HAND_TYPES["PAIR"], played_hand, requirement)
+    wins = ante_scores(HAND_TYPES["PAIR"], played_hand, requirement)
     display_cards(played_hand)
     if played_hand[0].rank != played_hand[1].rank:
         print("This is not a pair.")
@@ -224,7 +213,7 @@ def check_pair_probability(hand, deck):
     return probabilities
 
 
-def calculate_score(base_score, cards, requirement):
+def calculate_scores(base_score, cards, requirement):
     output = {}
 
     # Handle passing in a single card

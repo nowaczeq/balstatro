@@ -6,6 +6,6 @@ class Card:
 
 class HandType:
     def __init__(self):
-        cards = 1
-        chips = 0
-        mult = 0
+        self.cards = 1
+        self.chips = 0
+        self.mult = 0
