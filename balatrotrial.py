@@ -4,6 +4,7 @@ from classes import Card
 from hand_types import create_hand_types
 import sys
 import ante_scores
+import probability
 
 
 HAND_TYPES = create_hand_types()
@@ -58,28 +59,37 @@ def main():
             print("Deck size:", len(deck))
             print("\n")
 
-            probabilities = check_pair_probability(hand, deck)
+            # TODO: Redo this because this aint it chief
+            probabilities = probability.check_pair_probability(hand, deck)
+            
+            print("PROBABILITY FOR PAIRS:")
+            print("")
             for key, value in probabilities.items():
-                print("For ", end = "")
-                display_card(key)
-                print(":", end = "")
-                display_cards(value)
+                # Amount of cards that comprise a compatible pair
+                compatible_for_pair = len(value)
 
-                #TODO: Change to correctly display probability
-                chance = (len(value) / len(deck)) * 100 * DISCARD_SIZE * DISCARDS
-                print(f": {chance}% chance of drawing to a pair.")
-                print("")
+                # Calculate the probability that the next drawn card will create a compatible pair
+                pair_probability = compatible_for_pair / len(deck)
+
+                print("For ", end="")
+                display_card(key)
+                print(": ", end = " ")
+                print(f"{pair_probability * 100}% with: ")
+                for card in value:
+                    display_card(card)
+                
+                
 
         if command == "pair_win":
             check_score()
         
         if command == "ante1_blind_scores":
-            blinds = {
+            ante1_blinds = {
                 "SMALL_BLIND": 300,
                 "BIG_BLIND": 450,
                 "BOSS_BLIND": 600
             }
-            for name, requirement in blinds.items():
+            for name, requirement in ante1_blinds.items():
                 print(f"ANTE 1 {name}:")
                 ante_scores.calculate_ante_scores(requirement)
                 print("")
@@ -129,7 +139,7 @@ def check_score():
     display_cards(played_hand)
     print("")
     
-    wins = ante_scores(HAND_TYPES["PAIR"], played_hand, requirement)
+    wins = calculate_scores(HAND_TYPES["PAIR"], played_hand, requirement)
     display_cards(played_hand)
     if played_hand[0].rank != played_hand[1].rank:
         print("This is not a pair.")
