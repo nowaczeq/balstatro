@@ -75,7 +75,22 @@ def main():
             for name in HAND_TYPES:
                 score = HAND_TYPES[name]
                 card_chips_required = (requirement // score.mult) - score.chips
-                if card_chips_required > 0:
+                # Establish maximum score accomodating for rank limitations of some cards
+                if name == "TWO_PAIR":
+                    # Maximum: two aces and two face cards/tens
+                    maximum_score = (11 * 2) + (10 * 2)
+                elif name == "FULL_HOUSE":
+                    # Maximum: three aces and two face cards/tens
+                    maximum_score = (11 * 3) + (10 * 2)
+                elif name == "STRAIGHT" or name == "STRAIGHT_FLUSH":
+                    # Maximum: royal straight (11 + 10 * 4)
+                    maximum_score = 51
+                else:
+                    # Maximum: all aces
+                    maximum_score = score.cards * 11
+                if card_chips_required > maximum_score:
+                    print(f"A {name} cannot score, as the maximum possible score is {maximum_score}")
+                elif card_chips_required > 0:
                     print(f"A {name} would require a card chip total of {card_chips_required}")
                 else:
                     print(f"{name} scores required chips on its own")
