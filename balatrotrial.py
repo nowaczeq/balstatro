@@ -1,6 +1,6 @@
 import random
 import handtests
-from classes import Card
+from classes import Card, HandType, TypeChecker
 from hand_types import create_hand_types
 import sys
 import ante_scores
@@ -12,6 +12,7 @@ DECK_SIZE = 52
 HAND_SIZE = 8
 DISCARDS = 3
 DISCARD_SIZE = 5
+CHECKER = TypeChecker()
 
 random.seed(100)
 
@@ -120,20 +121,25 @@ def check_score():
 
     requirement = 300
 
-    # Check whether a pair exists in hand
-    played_hand = None
-    candidates = [hand[0]]
-    for i in range(1, len(hand) - 1):
-        for candidate in candidates:
-            if hand[i].rank == candidate.rank:
-                played_hand = [hand[i], candidate]
-                break
-        candidates.append(hand[i])
-    
-    # Exit if there is no pair in hand
-    if not played_hand:
-        print("You do not have a pair.")
-        return False
+    # Get the hand type that the user wants to play
+    played_type_name = ""
+    while True:
+        played_type_name = input("Select the hand type that you'd like to play: ")
+        if played_type_name in HAND_TYPES:
+            break
+        print("Not a valid type. ")
+
+    # Create structure for played type
+    played_type = HandType()
+    played_type = HAND_TYPES[played_type_name]
+
+    played_hand = ""
+
+    # Check whether the hand contains that type
+    try:
+        CHECKER.check(hand, played_type_name)
+    except ValueError:
+        print(f"Unknown hand type: {played_type_name}")
     
     print("Played hand: ", end = "")
     display_cards(played_hand)

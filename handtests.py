@@ -18,6 +18,7 @@ def check_high_card(hand):
     output["cards"] = highest
     return output
 
+# TODO REDO
 def check_pair(hand):
     output = {}
     if type(hand) is not list: 

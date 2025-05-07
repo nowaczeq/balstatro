@@ -1,3 +1,5 @@
+import handtests
+
 class Card:
     def __init__(self):
         self.suit = ""
@@ -9,3 +11,28 @@ class HandType:
         self.cards = 1
         self.chips = 0
         self.mult = 0
+
+class TypeChecker:
+    def __init__(self):
+        self.hand_checkers = {
+            "high card": handtests.check_high_card,
+            "pair": handtests.check_pair,
+            "two pair": handtests.check_two_pair,
+            "three of a kind": handtests.check_three_of_a_kind,
+            "four of a kind": handtests.check_four_of_a_kind,
+            "flush": handtests.check_flush,
+            "full house": handtests.check_full_house,
+            "straight": handtests.check_straight,
+            "straight flush": handtests.check_straight_flush,
+            "five of a kind": handtests.check_five_of_a_kind,
+            "flush five": handtests.check_flush_five,
+            "flush house": handtests.check_flush_house
+        }
+    
+    def check(self, hand, hand_type):
+        checker = self.hand_checkers.get(hand_type.lower())
+
+        if checker:
+            return checker(hand)
+        else:
+            raise ValueError(f"Unknown hand type: {hand_type}")
