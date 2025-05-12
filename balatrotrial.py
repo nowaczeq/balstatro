@@ -1,6 +1,6 @@
 import random
 import handtests
-from classes import Card, HandType, TypeChecker
+from classes import Card, HandType, TypeChecker, HandTypeTranslator
 from hand_types import create_hand_types
 import sys
 import ante_scores
@@ -79,10 +79,8 @@ def main():
                 for card in value:
                     display_card(card)
                 
-                
-
-        if command == "pair_win":
-            check_score()
+        if command == "play_blind":
+            play_blind()
         
         if command == "ante1_blind_scores":
             ante1_blinds = {
@@ -104,11 +102,11 @@ def usage():
     print("create_deck : create a random deck and hand")
     print("exit : terminate program")
     print("pair_prob : display likelihood of drawing a pair for each card")
-    print("pair_win : display score of a pair for each card in your hand")
+    print("play_blind : play a simulation of a small blind")
     print("ante1_blind_scores : display chips that cards have to add up to to win the first ante blinds in 1 hand (for each hand type)")
     return True
 
-def check_score():
+def play_blind():
     #Create random deck and random hand
     deck = populate_random_deck()
     hand = random.sample(deck, HAND_SIZE)
@@ -120,40 +118,49 @@ def check_score():
     print("Deck size:", len(deck))
 
     requirement = 300
+    print(f"Required score is {requirement}.")
 
     # Get the hand type that the user wants to play
     played_type_name = ""
     while True:
         played_type_name = input("Select the hand type that you'd like to play: ")
-        if played_type_name in HAND_TYPES:
-            break
-        print("Not a valid type. ")
+        if played_type_name in CHECKER.hand_checkers:
+              # Create structure for played type
+            played_hand = CHECKER.check(hand, played_type_name)
+            if not played_hand["wins"]:
+                print(f"You are not holding a {played_type_name}")
+            else:
+                print(f"You are holding a {played_type_name}")
+                break
+        else:
+            print("Not a valid type. ")
 
-    # Create structure for played type
-    played_type = HandType()
-    played_type = HAND_TYPES[played_type_name]
+    # Calculate score for played hand
+    # Translate basic language to hand type language
+    translator = HandTypeTranslator()
+    handname = translator.translate_basic(played_type_name)
 
-    played_hand = ""
-
-    # Check whether the hand contains that type
-    try:
-        CHECKER.check(hand, played_type_name)
-    except ValueError:
-        print(f"Unknown hand type: {played_type_name}")
-    
-    print("Played hand: ", end = "")
-    display_cards(played_hand)
-    print("")
-    
-    wins = calculate_scores(HAND_TYPES["PAIR"], played_hand, requirement)
-    display_cards(played_hand)
-    if played_hand[0].rank != played_hand[1].rank:
-        print("This is not a pair.")
-    elif wins["wins"]:
-        print(f"satisfies requirement of {requirement} with {wins["score"]} points.")
+    if handname in HAND_TYPES:
+        hand = HAND_TYPES[handname]
     else:
-        print(f"does not satisfy requirement of {requirement} with {wins["score"]} points.")
-    return True
+        raise ValueError("Couldn't translate name of played hand")
+
+    # Get the cards that were played in the hand
+    cards = played_hand["cards"]
+    
+    chips = hand.chips
+    for card in cards:
+        chips += card.chips
+    
+    score = chips * hand.mult
+    print(f"Hand score: {score}")
+
+    if score > requirement:
+        print("Successfully passed the requirement.")
+        return True
+    else:
+        print("Hand did not pass the requirement.")
+        return True
 
 def populate_random_deck():
     suits = ["hearts", "diamonds", "clubs", "spades"]

@@ -31,8 +31,30 @@ class TypeChecker:
     
     def check(self, hand, hand_type):
         checker = self.hand_checkers.get(hand_type.lower())
-
         if checker:
             return checker(hand)
         else:
             raise ValueError(f"Unknown hand type: {hand_type}")
+
+class HandTypeTranslator:
+    def __init__(self):
+        self.hand_dict = {
+            "high card": "HIGH_CARD",
+            "pair": "PAIR",
+            "two pair": "TWO_PAIR",
+            "three of a kind": "THREE_OF_A_KIND",
+            "four of a kind": "FOUR_OF_A_KIND",
+            "flush": "FLUSH",
+            "full house": "FULL_HOUSE",
+            "straight": "STRAIGHT",
+            "straight flush": "STRAIGHT_FLUSH",
+            "five of a kind": "FIVE_OF_A_KIND",
+            "flush five": "FLUSH_FIVE",
+            "flush house": "FLUSH_HOUSE"
+        }
+    
+    def translate_basic(self, name):
+        if name in self.hand_dict:
+            return self.hand_dict[name]
+        else:
+            return False
