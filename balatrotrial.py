@@ -223,51 +223,5 @@ def display_card(card):
         else:
             print(card.rank, "of", card.suit, end=" ")
 
-
-def check_pair_probability(hand, deck):
-    probabilities = {}
-    for held_card in hand:
-        compatible_cards = []
-        for deck_card in deck:
-            if handtests.check_pair([held_card, deck_card]):
-                compatible_cards.append(deck_card)
-        probabilities[held_card] = compatible_cards
-    
-    return probabilities
-
-
-def calculate_scores(base_score, cards, requirement):
-    output = {}
-
-    # Handle passing in a single card
-    if type(cards) is not list:
-        # Check if the hand type is high card
-        ishighcard = (base_score.chips == 5 and base_score.mult == 1)
-        # Calculate if hand is high card, else return False, since one card cannot fulfill anything else
-        if ishighcard:
-            output["score"] = (cards.chips + base_score.chips) * base_score.mult
-            output["wins"] = (output["score"] >= requirement)
-            return output
-        else:
-            return {0, False}
-    
-    chips = base_score.chips
-    for card in cards:
-        chips += card.chips
-    output["score"] = chips * base_score.mult
-    output["wins"] = output["score"] >= requirement
-    return output
-    
-
-def calculate_pair_score(base_score, card, requirement):
-    output = {}
-    chips = (card.chips * 2) + base_score.chips
-    mult = base_score.mult
-    score = chips * mult
-    output["score"] = score
-    output["wins"] = (score >= requirement)
-    return output
-
-
 if __name__ == "__main__":
     main()
