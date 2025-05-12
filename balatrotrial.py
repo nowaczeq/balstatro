@@ -34,18 +34,6 @@ def main():
             # DISPLAY SCORES OF HANDS
             for type, scoring in HAND_TYPES.items():
                 print(f"{type} scores {scoring.chips} chips and {scoring.mult} mult with total of {scoring.chips * scoring.mult}")
-        
-        
-        if command == "create_deck":
-            #Create random deck and random hand
-            deck = populate_random_deck()
-            hand = random.sample(deck, HAND_SIZE)
-            deck = [card for card in deck if card not in hand]
-
-            print("Initial hand: ", end = "")
-            display_cards(hand)
-            print("")
-            print("Deck size:", len(deck))
 
         if command == "pair_prob":
             #Create random deck and random hand
@@ -99,7 +87,6 @@ def main():
 def usage():
     print("")
     print("display_scores : display base chips and mult for hands")
-    print("create_deck : create a random deck and hand")
     print("exit : terminate program")
     print("pair_prob : display likelihood of drawing a pair for each card")
     print("play_blind : play a simulation of a small blind")
@@ -119,13 +106,29 @@ def play_blind():
 
     requirement = 300
     print(f"Required score is {requirement}.")
+    while True:
+        action = input(f"Select action that you'd like to do (play/draw/discard): ")
+        if action == "play":
+            return play_hand(hand, requirement)
+        elif action == "draw":
+            draw_amount = random.randint(1, 3)
+            print(f"You have drawn {draw_amount} cards.")
+            drawn_cards = random.sample(deck, draw_amount)
+            deck = [card for card in deck if card not in hand]
+            hand = hand + drawn_cards
+            print("Current hand: ", end = "")
+            display_cards(hand)
+        
 
+def play_hand(hand, requirement = 300):
     # Get the hand type that the user wants to play
     played_type_name = ""
+    print("Current hand: ", end = "")
+    display_cards(hand)
     while True:
         played_type_name = input("Select the hand type that you'd like to play: ")
         if played_type_name in CHECKER.hand_checkers:
-              # Create structure for played type
+            # Create structure for played type
             played_hand = CHECKER.check(hand, played_type_name)
             if not played_hand["wins"]:
                 print(f"You are not holding a {played_type_name}")
