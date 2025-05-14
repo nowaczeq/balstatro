@@ -1,10 +1,14 @@
-from classes import Card
-
 # FUNCTIONS TO CHECK WHETHER A HAND TYPE WAS ACHIEVED
 # hand: an amount of cards to be checked by the function
 # rtype: {["wins"]: bool, ["cards"]: Card()}
 # ["wins"] indicates whether the hand contains the card
 # ["cards"] return the cards used to create the hand, and all cards in hand if hand doesn't win
+
+class Card:
+    def __init__(self):
+        self.suit = ""
+        self.rank = 0
+        self.chips = 0
 
 def check_high_card(hand):
     highest = Card()
@@ -84,7 +88,10 @@ def check_two_pair(hand):
     return output
 
 def check_three_of_a_kind(hand):
-    output = {}
+    output = {
+        "cards": [],
+        "wins": False
+    }
     if type(hand) is not list: 
         output["cards"] = None
         output["wins"] = False
@@ -94,23 +101,27 @@ def check_three_of_a_kind(hand):
 
     for card in hand:
         if card.rank not in ranks:
-            ranks[card.rank] = 1
+            ranks[card.rank] = [card]
         else:
-            ranks[card.rank] += 1
-
-    foundthree = False
-    candidates = []
-    for key, value in ranks.items():
-        if value == 3:
-            for card in hand:
-                if card.rank == key:
-                    candidates.append(card)
-            output["cards"] = candidates
-            foundthree = True
-            break
+            ranks[card.rank].append(card)
     
-    if not foundthree: output["cards"] = None
-    output["wins"] = foundthree
+    max_rank = 0
+    foundthree = False
+    for key, value in ranks.items():
+        if len(value) >= 3 and key > max_rank:
+            max_rank = key
+            foundthree = True
+
+    if not foundthree:
+        output["cards"] = None
+        output["wins"] = False
+        return output
+    
+    for card in hand:
+        if card.rank == max_rank and len(output["cards"]) < 3:
+            output["cards"].append(card)
+    
+    output["wins"] = True
     return output
 
 def check_four_of_a_kind(hand):
@@ -121,20 +132,13 @@ def check_four_of_a_kind(hand):
         return output
     
     ranks = {}
-    candidates = []
 
     for card in hand:
         if card.rank not in ranks:
             ranks[card.rank] = 1
-            candidates.append(card)
-        elif ranks[card.rank] == 3:
-            output["wins"] = True
-            candidates.append(card)
-            output["cards"] = candidates
-            return output
         else:
             ranks[card.rank] += 1
-            candidates.append(card)
+            
 
     output["wins"] = False
     output["cards"] = None
@@ -192,19 +196,42 @@ def check_straight(hand):
         output["cards"] = None
         return output
     
-    ranks = []
+    ranks = set()
     for card in hand:
-        ranks.append(card.rank)
+        ranks.add(card.rank)
     
-    ranks.sort()
-    for i in range(0, len(ranks) - 1):
-        if ranks[i] != (ranks[i + 1] - 1):
+    if len(ranks) < 5:
+        output["wins"] = False
+        output["cards"] = None
+        return output
+    
+    ranks = sorted(ranks)
+    for i in range(len(ranks) - 1):
+        if ranks[i + 1] != ranks[i] + 1:
             output["wins"] = False
             output["cards"] = None
             return output
-        
+    
     output["wins"] = True
+    # TODO: Change this to return the cards that comprise the straight
+    output["cards"] = None
     return output
+
+    # ranks = []
+    # for card in hand:
+    #     ranks.append(card.rank)
+    
+    # ranks.sort()
+    # for i in range(0, len(ranks) - 1):
+    #     if ranks[i] == (ranks[i + 1]):
+    #         continue
+    #     if ranks[i] != (ranks[i + 1] - 1):
+    #         output["wins"] = False
+    #         output["cards"] = None
+    #         return output
+        
+    # output["wins"] = True
+    # return output
 
 def check_straight_flush(hand):
     output = {}
@@ -267,21 +294,47 @@ def check_flush_house(hand):
 
 def test():
     card1 = Card()
-    card1.suit = "hearts"
-    card1.rank = 2
     card2 = Card()
-    card2.suit = "clubs"
-    card2.rank = 2
     card3 = Card()
-    card3.suit = "hearts"
-    card3.rank = 3
     card4 = Card()
-    card4.suit = "hearts"
-    card4.rank = 5
     card5 = Card()
+    card6 = Card()
+    card7 = Card()
+    card8 = Card()
+
+    card1.suit = "diamonds"
+    card1.rank = 2
+
+    card2.suit = "diamonds"
+    card2.rank = 2
+
+    card3.suit = "diamonds"
+    card3.rank = 3
+
+    card4.suit = "diamonds"
+    card4.rank = 5
+
     card5.suit = "diamonds"
     card5.rank = 2
-    cards = [card1, card2, card3, card4, card5]
+
+    card6.suit = "diamonds"
+    card6.rank = 4
+    
+    card7.suit = "diamonds"
+    card7.rank = 2
+
+    card8.suit = "diamonds"
+    card8.rank = 6
+
+    cards = [
+        card1, 
+        card2, 
+        card3, 
+        card4, 
+        card5, 
+        card6, 
+        card7, 
+        card8]
     print("Played hand: ", end = "")
     display_cards(cards)
     print("")
