@@ -1,5 +1,5 @@
 # Helper function to calculate required scores for subsequent antes
-#THIS IS A GITHUB TEST
+
 from hand_types import create_hand_types
 HAND_TYPES = create_hand_types()
 

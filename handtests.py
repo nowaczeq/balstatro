@@ -22,7 +22,6 @@ def check_high_card(hand):
     output["cards"] = highest
     return output
 
-# TODO REDO
 def check_pair(hand):
     output = {}
     if type(hand) is not list: 
@@ -37,14 +36,21 @@ def check_pair(hand):
     checker = {}
     for card in hand:
         if card.rank not in checker:
-            checker[card.rank] = card
+            checker[card.rank] = [card]
         else:
-            output["cards"] = [checker[card.rank], card]
-            output["wins"] = True
-            return output
+            checker[card.rank].append(card)
     
-    output["wins"] = False
-    output["cards"] = None
+    highest_eligible_rank = 0
+    highest_eligible_cards = []
+    pair_found = False
+    for rank, cards in checker.items():
+        if len(cards) >= 2 and rank > highest_eligible_rank:
+            pair_found = True
+            highest_eligible_rank = rank
+            highest_eligible_cards = [cards[0], cards[1]]
+
+    output["wins"] = pair_found
+    output["cards"] = highest_eligible_cards if highest_eligible_cards else None
     return output
 
 def check_two_pair(hand):
@@ -312,7 +318,7 @@ def test():
     card3.rank = 3
 
     card4.suit = "diamonds"
-    card4.rank = 5
+    card4.rank = 6
 
     card5.suit = "diamonds"
     card5.rank = 2
