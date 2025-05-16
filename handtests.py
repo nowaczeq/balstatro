@@ -157,14 +157,23 @@ def check_flush(hand):
         output["wins"] = False
         output["cards"] = None
         return output
-    target = hand[0].suit
+
+    suits = {}
     for card in hand:
-        if card.suit != target:
-            output["wins"] = False
-            output["cards"] = None
+        if card.suit not in suits:
+            suits[card.suit] = [card]
+        else:
+            suits[card.suit].append(card)
+    
+    for suit, cards in suits.items():
+        if len(cards) >= 5:
+            output["wins"] = True
+            cards.sort(key=lambda card: card.rank, reverse=True)
+            output["cards"] = cards[:5]
             return output
-        
-    output["wins"] = True
+
+    output["wins"] = False
+    output["cards"] = None
     return output
 
 def check_full_house(hand):
@@ -318,19 +327,19 @@ def test():
     card3.rank = 3
 
     card4.suit = "diamonds"
-    card4.rank = 6
+    card4.rank = 3
 
     card5.suit = "diamonds"
-    card5.rank = 2
+    card5.rank = 6
 
     card6.suit = "diamonds"
-    card6.rank = 4
+    card6.rank = 6
     
     card7.suit = "diamonds"
-    card7.rank = 2
+    card7.rank = 7
 
     card8.suit = "diamonds"
-    card8.rank = 6
+    card8.rank = 7
 
     cards = [
         card1, 
