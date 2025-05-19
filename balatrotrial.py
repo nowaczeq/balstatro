@@ -40,6 +40,8 @@ def main():
             deck = populate_random_deck()
             hand = random.sample(deck, HAND_SIZE)
             deck = [card for card in deck if card not in hand]
+            # Amount of additional cards you can see from the deck if you hard fish for the pair
+            draw_limit = DISCARD_SIZE * DISCARDS
 
             print("")
             print("Initial hand: ", end = "")
@@ -49,7 +51,7 @@ def main():
             print("\n")
 
             # TODO: Redo this because this aint it chief
-            probabilities = probability.check_pair_probability(hand, deck)
+            probabilities = probability.check_pair_probability(hand, deck, draw_limit)
             
             print("PROBABILITY FOR PAIRS:")
             print("")
@@ -141,7 +143,7 @@ def play_hand(hand, requirement = 300):
     # Calculate score for played hand
     # Translate basic language to hand type language
     translator = HandTypeTranslator()
-    handname = translator.translate_basic(played_type_name)
+    handname = translator.translate(played_type_name)
 
     if handname in HAND_TYPES:
         hand = HAND_TYPES[handname]

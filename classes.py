@@ -38,6 +38,7 @@ class TypeChecker:
 
 class HandTypeTranslator:
     def __init__(self):
+        # Add keys for additional translations
         self.hand_dict = {
             "high card": "HIGH_CARD",
             "pair": "PAIR",
@@ -53,7 +54,7 @@ class HandTypeTranslator:
             "flush house": "FLUSH_HOUSE"
         }
     
-    def translate_basic(self, name):
+    def translate(self, name):
         if name in self.hand_dict:
             return self.hand_dict[name]
         else:

@@ -237,9 +237,9 @@ def check_straight(hand):
         return output
     
     # Check whether the unique ranks are consequtive
-    ranks = sorted(ranks, reverse=True)
+    ranks = sorted(ranks)
     for i in range(len(ranks) - 1):
-        if ranks[i + 1] != ranks[i] - 1:
+        if ranks[i + 1] != ranks[i] + 1:
             output["wins"] = False
             output["cards"] = None
             return output
