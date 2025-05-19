@@ -10,6 +10,10 @@ class Card:
         self.rank = 0
         self.chips = 0
 
+### FUNCTIONS TO CHECK FOR HAND TYPES
+# rtype: ["cards"]: cards that are included in the highest hand of that type
+#        ["wins"]: Bool indicating whether the hand includes the hand type
+
 def check_high_card(hand):
     highest = Card()
     highest.rank = 0
@@ -202,6 +206,8 @@ def check_full_house(hand):
     if not output["wins"]: output["cards"] = None
     return output
 
+# TODO: Now only works for hands of 5, with one straight: change to accept any amount of cards, 
+# and return the highest straight
 def check_straight(hand):
     output = {}
     output["cards"] = hand
@@ -211,42 +217,42 @@ def check_straight(hand):
         output["cards"] = None
         return output
     
+    # Map 1: to assign cards to their ranks
+    rank_to_card = {}
+    for card in hand:
+        if card.rank not in rank_to_card:
+            rank_to_card[card.rank] = [card]
+        else:
+            rank_to_card[card.rank].append(card)
+
+    # Map 2: to get unique ranks of cards in hand        
     ranks = set()
     for card in hand:
         ranks.add(card.rank)
     
+    # Check how many unique ranks there are, return if <5
     if len(ranks) < 5:
         output["wins"] = False
         output["cards"] = None
         return output
     
-    ranks = sorted(ranks)
+    # Check whether the unique ranks are consequtive
+    ranks = sorted(ranks, reverse=True)
     for i in range(len(ranks) - 1):
-        if ranks[i + 1] != ranks[i] + 1:
+        if ranks[i + 1] != ranks[i] - 1:
             output["wins"] = False
             output["cards"] = None
             return output
     
+    # Extract the cards that comprise the straight
+    straight_cards  = []
+    for rank in ranks:
+        straight_cards.append(rank_to_card[rank][0])
+
     output["wins"] = True
     # TODO: Change this to return the cards that comprise the straight
-    output["cards"] = None
+    output["cards"] = straight_cards
     return output
-
-    # ranks = []
-    # for card in hand:
-    #     ranks.append(card.rank)
-    
-    # ranks.sort()
-    # for i in range(0, len(ranks) - 1):
-    #     if ranks[i] == (ranks[i + 1]):
-    #         continue
-    #     if ranks[i] != (ranks[i + 1] - 1):
-    #         output["wins"] = False
-    #         output["cards"] = None
-    #         return output
-        
-    # output["wins"] = True
-    # return output
 
 def check_straight_flush(hand):
     output = {}
