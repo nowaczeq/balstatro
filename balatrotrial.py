@@ -4,8 +4,8 @@ from classes import Card, HandType, TypeChecker, HandTypeTranslator
 from hand_types import create_hand_types
 import sys
 import ante_scores
-import probability
-
+import probability_checker
+import calculate_probability
 
 HAND_TYPES = create_hand_types()
 DECK_SIZE = 52
@@ -52,7 +52,7 @@ def main():
             print("\n")
 
             # TODO: Redo this because this aint it chief
-            probabilities = probability.check_pair_probability(hand, deck, draw_limit)
+            probabilities = probability_checker.check_pair_probability(hand, deck, draw_limit)
             
             print("PROBABILITY FOR PAIRS:")
             print("")

@@ -4,7 +4,7 @@ import time
 
 def check_pair_probability(hand, deck, draw_limit):
     probabilities = {}
-    counter = 0
+    counter = 1
     start_time = time.perf_counter()
 
     for hand_card in hand:
@@ -16,10 +16,12 @@ def check_pair_probability(hand, deck, draw_limit):
             drawn_hand = [hand_card] + list(draw)
             checker = check_pair(drawn_hand)
             if checker["wins"] and checker["cards"][0].rank == hand_card.rank:
-                print("Found valid pair combination")
+                print(f"Combination {counter}: valid")
+                counter += 1
                 valid_draws += 1
             else:
-                print("Invalid pair combination")
+                print(f"Combination {counter}: invalid")
+                counter += 1
             all_draws += 1
         
         prob = valid_draws / all_draws if all_draws > 0 else 0

@@ -12,6 +12,36 @@ class HandType:
         self.chips = 0
         self.mult = 0
 
+class Deck:
+    def __init__(self):
+        self.ranks = {}
+        self.suits = {}
+        self.length = 0
+    
+    def add_card(self, val: Card) -> bool:
+        if val.rank not in self.ranks:
+            self.ranks[val.rank] = [val]
+        else:
+            self.ranks[val.rank].append(val)
+        
+        if val.suit not in self.suits:
+            self.suits[val.suit] = [val]
+        else:
+            self.suits[val.suit].append(val)
+        
+        self.length += 1
+        return True
+    
+    def remove_card(self, val: Card) -> bool:
+        if not self.ranks.get(val.rank) or not self.suits.get(val.suit):
+            return False
+        
+        self.ranks[val.rank].remove(val)
+        self.suits[val.suit].remove(val)
+        self.length -= 1
+        return True
+        
+
 class TypeChecker:
     def __init__(self):
         self.hand_checkers = {
