@@ -1,6 +1,6 @@
 import random
 import handtests
-from classes import Card, HandType, TypeChecker, HandTypeTranslator
+from classes import Card, HandType, TypeChecker, HandTypeTranslator, Deck
 from hand_types import create_hand_types
 import sys
 import ante_scores
@@ -38,9 +38,12 @@ def main():
 
         if command == "pair_prob":
             #Create random deck and random hand
-            deck = populate_random_deck()
-            hand = random.sample(deck, HAND_SIZE)
-            deck = [card for card in deck if card not in hand]
+            decklist = populate_random_deck()
+            hand = random.sample(decklist, HAND_SIZE)
+            decklist = [card for card in decklist if card not in hand]
+            deck = Deck()
+            for card in decklist:
+                deck.add_card(card)
             # Amount of additional cards you can see from the deck if you hard fish for the pair
             draw_limit = DISCARD_SIZE * DISCARDS
 
@@ -48,27 +51,22 @@ def main():
             print("Initial hand: ", end = "")
             display_cards(hand)
             print("\n")
-            print("Deck size:", len(deck))
+            print("Deck size:", deck.length)
             print("\n")
 
             # TODO: Redo this because this aint it chief
-            probabilities = probability_checker.check_pair_probability(hand, deck, draw_limit)
+            probabilities = probability_checker.check_pair_probability(hand, deck)
             
             print("PROBABILITY FOR PAIRS:")
             print("")
             for key, value in probabilities.items():
-                # Amount of cards that comprise a compatible pair
-                compatible_for_pair = len(value)
-
-                # Calculate the probability that the next drawn card will create a compatible pair
-                pair_probability = compatible_for_pair / len(deck)
-
-                print("For ", end="")
+                print(f"For ", end="")
                 display_card(key)
-                print(": ", end = " ")
-                print(f"{pair_probability * 100}% with: ")
-                for card in value:
-                    display_card(card)
+                print(": ", end="")
+                percent_probability = str(value["probability"] * 100)
+                print(f"{percent_probability}% probability of a pair with: ", end="")
+                display_cards(value["valid_cards"])
+                print("")
                 
         if command == "play_blind":
             play_blind()

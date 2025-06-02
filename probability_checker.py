@@ -1,33 +1,21 @@
 from itertools import combinations
 from handtests import check_pair
+from calculate_probability import calculate_pair_probability
+from classes import Deck
 import time
 
-def check_pair_probability(hand, deck, draw_limit):
+# Check how many cards in the deck would make a pair
+def check_pair_probability(hand, deck: Deck):
     probabilities = {}
     counter = 1
     start_time = time.perf_counter()
 
     for hand_card in hand:
         print(f"Initiating analysis for {hand_card.rank} of {hand_card.suit} ")
-        valid_draws = 0
-        all_draws = 0
-
-        for draw in combinations(deck, draw_limit):
-            drawn_hand = [hand_card] + list(draw)
-            checker = check_pair(drawn_hand)
-            if checker["wins"] and checker["cards"][0].rank == hand_card.rank:
-                print(f"Combination {counter}: valid")
-                counter += 1
-                valid_draws += 1
-            else:
-                print(f"Combination {counter}: invalid")
-                counter += 1
-            all_draws += 1
-        
-        prob = valid_draws / all_draws if all_draws > 0 else 0
+        data = calculate_pair_probability(deck, hand_card)
+        probabilities[hand_card] = data
         local_time = time.perf_counter()
         print(f"Analysis for {hand_card.rank} of {hand_card.suit} took {local_time - start_time}.")
-        probabilities[hand_card] = prob
     
     print(f"Analysis finished. Time elapsed: {time.perf_counter() - start_time}")
     return probabilities
