@@ -5,7 +5,7 @@ import time
 def check_pair_probability(hand, deck, draw_limit):
     probabilities = {}
     counter = 0
-    start_time = time.time()
+    start_time = time.perf_counter()
 
     for hand_card in hand:
         print(f"Initiating analysis for {hand_card.rank} of {hand_card.suit} ")
@@ -23,11 +23,11 @@ def check_pair_probability(hand, deck, draw_limit):
             all_draws += 1
         
         prob = valid_draws / all_draws if all_draws > 0 else 0
-        local_time = time.time()
-        print(f"Analysis for {hand_card.rank} of {hand_card.suit} took {start_time - local_time}.")
+        local_time = time.perf_counter()
+        print(f"Analysis for {hand_card.rank} of {hand_card.suit} took {local_time - start_time}.")
         probabilities[hand_card] = prob
     
-    print("Analysis finished.")
+    print(f"Analysis finished. Time elapsed: {time.perf_counter() - start_time}")
     return probabilities
 
 

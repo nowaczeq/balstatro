@@ -41,6 +41,7 @@ class HandTypeTranslator:
         # Add keys for additional translations
         self.hand_dict = {
             "high card": "HIGH_CARD",
+            "high_card": "HIGH_CARD",
             "pair": "PAIR",
             "two pair": "TWO_PAIR",
             "three of a kind": "THREE_OF_A_KIND",

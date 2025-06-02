@@ -28,6 +28,7 @@ def main():
             usage()
 
         if command == "exit":
+            print("Exiting program. Goodbye!")
             sys.exit(0)
 
         if command == "display_scores":
