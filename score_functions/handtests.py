@@ -1,3 +1,4 @@
+from card_display import display_card, display_cards
 # FUNCTIONS TO CHECK WHETHER A HAND TYPE WAS ACHIEVED
 # hand: an amount of cards to be checked by the function
 # rtype: {["wins"]: bool, ["cards"]: Card()}
@@ -410,20 +411,6 @@ def test():
     print("Flush House: " +  str(flushhouse["wins"]) + " with ", end = "")
     display_cards(flushhouse["cards"])
     print("")
-
-
-def display_cards(cards):
-        if not cards:
-            print("N/A", end="")
-        else:
-            for card in cards:
-                display_card(card)
-
-def display_card(card):
-        if not card:
-            print("N/A")
-        else:
-            print(card.rank, "of", card.suit, end=" ")
 
 if __name__ == "__main__":
     test()

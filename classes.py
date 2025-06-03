@@ -1,4 +1,4 @@
-import handtests
+import score_functions.handtests as handtests
 
 class Card:
     def __init__(self):

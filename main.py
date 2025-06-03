@@ -1,11 +1,12 @@
 import random
-import handtests
+import score_functions.handtests as handtests
 from classes import Card, HandType, TypeChecker, HandTypeTranslator, Deck
-from hand_types import create_hand_types
+from score_functions.hand_types import create_hand_types
 import sys
-import ante_scores
-import probability_checker
-import calculate_probability
+import score_functions.ante_scores as ante_scores
+import probability_functions.probability_checker as probability_checker
+import probability_functions.calculate_probability as calculate_probability
+from card_display import display_card, display_cards
 
 HAND_TYPES = create_hand_types()
 DECK_SIZE = 52
@@ -219,19 +220,6 @@ def draw(amount, deck, hand):
         deck.remove(card)
         hand.append(card)
     return hand, deck
-
-def display_cards(cards):
-        if not cards:
-            print("N/A", end="")
-        else:
-            for card in cards:
-                display_card(card)
-
-def display_card(card):
-        if not card:
-            print("N/A")
-        else:
-            print(card.rank, "of", card.suit, end=" ")
 
 if __name__ == "__main__":
     main()
