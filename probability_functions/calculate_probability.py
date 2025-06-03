@@ -1,5 +1,13 @@
 from classes import Card, Deck
 
+# FUNCTIONS TO CALCULATE THE PROBABILITY FOR
+##########     SINGLE CARDS     #########
+def calculate_high_card_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    output["probability"] = 1.0
+    output["valid_cards"] = card
+    return output
+
 def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
 
@@ -35,5 +43,51 @@ def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output["valid_cards"] = valid_cards
     return output
 
-def calculate_two_pair_probability(deck: Deck, card: Card):
-    return
+
+def calculate_two_pair_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+def calculate_three_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_four_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_flush_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_full_house_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_straight_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_straight_flush_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_five_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_flush_five_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output
+
+
+def calculate_flush_house_probability(deck: Deck, card: Card, draw_limit: int):
+    output = {}
+    return output

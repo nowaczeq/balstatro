@@ -1,6 +1,6 @@
 # Helper function to calculate required scores for subsequent antes
 
-from hand_types import create_hand_types
+from score_functions.hand_types import create_hand_types
 HAND_TYPES = create_hand_types()
 
 

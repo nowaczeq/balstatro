@@ -39,6 +39,9 @@ def main():
 
         if command == "pair_prob":
             pair_prob()
+
+        if command == "free_prob":
+            free_prob()
                 
         if command == "play_blind":
             play_blind()
@@ -64,6 +67,7 @@ def usage():
     print("pair_prob : display likelihood of drawing a pair for each card")
     print("play_blind : play a simulation of a small blind")
     print("ante1_blind_scores : display chips that cards have to add up to to win the first ante blinds in 1 hand (for each hand type)")
+    print("free_prob : display probability of each hand type given a specific hand")
     return True
 
 def pair_prob():
@@ -76,7 +80,7 @@ def pair_prob():
         deck.add_card(card)
 
     # Amount of additional cards you can see from the deck if you hard fish for the pair
-    draw_limit = DISCARD_SIZE * DISCARDS
+    draw_limit = DISCARD_SIZE * DISCARDS * 0
 
     print("")
     print("Initial hand: ", end = "")
@@ -89,17 +93,51 @@ def pair_prob():
     
     print("PROBABILITY FOR PAIRS:")
     print("")
-    print(f"With {DISCARD_SIZE} discard sizwe and {DISCARDS} discards, the probabilities are")
+    print(f"With {DISCARD_SIZE} discard size and {DISCARDS} discards, the probabilities are: \n")
     for key, value in probabilities.items():
         print(f"For ", end="")
         display_card(key)
         print(": ", end="")
-        percent_probability = str(value["probability"] * 100)
+        percent_probability = str(round(value["probability"] * 100, 2))
         print(f"{percent_probability}% probability of a pair with: ", end="")
         display_cards(value["valid_cards"])
         print("")
 
     return
+
+def free_prob():
+    #Create random deck and random hand
+    decklist = populate_random_deck()
+    hand = random.sample(decklist, HAND_SIZE)
+    decklist = [card for card in decklist if card not in hand]
+    deck = Deck()
+    for card in decklist:
+        deck.add_card(card)
+    # Amount of additional cards you can see from the deck if you hard fish for the pair
+    draw_limit = DISCARD_SIZE * DISCARDS * 0
+
+    print("")
+    print("Initial hand: ", end = "")
+    display_cards(hand)
+    print("\n")
+    print("Deck size:", deck.length)
+    print("\n")
+
+    checker = HandTypeTranslator()
+    # Get a valid hand to check
+    while True:
+        checked_type = input("Select the handtype which you would like to check: ")
+
+        if checked_type in checker.hand_dict:
+            checked_type = checker[checked_type]
+            break
+        else:
+            print("That is not a valid type.\n")
+
+    for card in hand:
+        probability = CHECKER.check_probability
+
+    
 
 def play_blind():
     #Create random deck and random hand
@@ -135,9 +173,9 @@ def play_hand(hand, requirement = 300):
     display_cards(hand)
     while True:
         played_type_name = input("Select the hand type that you'd like to play: ")
-        if played_type_name in CHECKER.hand_checkers:
+        if played_type_name in CHECKER.score_checkers:
             # Create structure for played type
-            played_hand = CHECKER.check(hand, played_type_name)
+            played_hand = CHECKER.check_score(hand, played_type_name)
             if not played_hand["wins"]:
                 print(f"You are not holding a {played_type_name}")
             else:
