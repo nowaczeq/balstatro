@@ -1,6 +1,7 @@
 import random
 import score_functions.handtests as handtests
-from classes import Card, HandType, TypeChecker, HandTypeTranslator, Deck
+from classes.classes import Card, HandType, HandTypeTranslator, Deck
+from classes.typechecker import TypeChecker
 from score_functions.hand_types import create_hand_types
 import sys
 import score_functions.ante_scores as ante_scores
@@ -59,7 +60,8 @@ def main():
 
         print("")
         command = ""
-        
+
+# Display functions available in the program        
 def usage():
     print("")
     print("display_scores : display base chips and mult for hands")
@@ -70,6 +72,7 @@ def usage():
     print("free_prob : display probability of each hand type given a specific hand")
     return True
 
+# Calculate the probability of finding a pair in the deck for a randomly generated hand
 def pair_prob():
     #Create random deck and random hand
     decklist = populate_random_deck()
@@ -105,6 +108,7 @@ def pair_prob():
 
     return
 
+# Calculate the probability of finding each hand type in a randomly generated deck
 def free_prob():
     #Create random deck and random hand
     decklist = populate_random_deck()
@@ -135,10 +139,13 @@ def free_prob():
             print("That is not a valid type.\n")
 
     for card in hand:
-        probability = CHECKER.check_probability
+        probability = CHECKER.check_probability(
+            card, checked_type, deck, draw_limit
+        )
 
     
-
+# Simulate playing a blind
+# TODO: Support discarding
 def play_blind():
     #Create random deck and random hand
     deck = populate_random_deck()
@@ -165,7 +172,7 @@ def play_blind():
             print("Current hand: ", end = "")
             display_cards(hand)
     
-
+# Helper for play_blind: play a hand of cards and check whether it meets the requirement
 def play_hand(hand, requirement = 300):
     # Get the hand type that the user wants to play
     played_type_name = ""
@@ -211,6 +218,7 @@ def play_hand(hand, requirement = 300):
         print("Hand did not pass the requirement.")
         return True
 
+# Generate a standard deck of cards
 def populate_random_deck():
     suits = ["hearts", "diamonds", "clubs", "spades"]
     ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -231,6 +239,7 @@ def populate_random_deck():
     
     return full_deck
 
+# Discard $size$ amount of cards from hand
 def discard(deck, hand, size):
     """
     Discard cards from the hand and return the new hand and the discarded cards.
@@ -245,7 +254,7 @@ def discard(deck, hand, size):
     draw(DISCARDS, deck, hand)
     return hand, discarded
 
-
+# Draw amount of cards to hand
 def draw(amount, deck, hand):
     """
     Draw cards from the deck and add them to the hand.

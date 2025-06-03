@@ -1,4 +1,4 @@
-from classes import HandType
+from classes.classes import HandType
 
 def create_hand_types():
 

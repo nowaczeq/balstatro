@@ -1,5 +1,5 @@
 from probability_functions.calculate_probability import calculate_pair_probability
-from classes import Deck
+from classes.classes import Deck
 import time
 
 

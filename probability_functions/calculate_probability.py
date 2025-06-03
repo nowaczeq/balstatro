@@ -1,4 +1,4 @@
-from classes import Card, Deck
+from classes.classes import Card, Deck
 
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
 ##########     SINGLE CARDS     #########
