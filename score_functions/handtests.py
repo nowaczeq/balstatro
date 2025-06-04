@@ -1,15 +1,18 @@
+# Code to allow to import card_display module from subfolder
+import sys
+import os
+
+# Get the absolute path of the parent directory
+#TODO: Fix in production. This is a bandaid fix, but I can't be bothered right now.
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from card_display import display_card, display_cards
+from classes.classes import Card
 # FUNCTIONS TO CHECK WHETHER A HAND TYPE WAS ACHIEVED
 # hand: an amount of cards to be checked by the function
 # rtype: {["wins"]: bool, ["cards"]: Card()}
 # ["wins"] indicates whether the hand contains the card
 # ["cards"] return the cards used to create the hand, and all cards in hand if hand doesn't win
-
-class Card:
-    def __init__(self):
-        self.suit = ""
-        self.rank = 0
-        self.chips = 0
 
 ### FUNCTIONS TO CHECK FOR HAND TYPES
 # rtype: ["cards"]: cards that are included in the highest hand of that type

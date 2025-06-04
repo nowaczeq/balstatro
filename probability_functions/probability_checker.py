@@ -6,8 +6,6 @@ import time
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
 ##########     HANDS [arrays of Cards]     #########
 
-# TODO: Implement a function that dynamically checks the probability for a given hand
-
 # Check how many cards in the deck would make a pair
 def check_hands_pair_probability(hand, deck: Deck, draw_limit: int):
     probabilities = {}

@@ -83,7 +83,7 @@ def pair_prob():
         deck.add_card(card)
 
     # Amount of additional cards you can see from the deck if you hard fish for the pair
-    draw_limit = DISCARD_SIZE * DISCARDS * 0
+    draw_limit = DISCARD_SIZE * DISCARDS
 
     print("")
     print("Initial hand: ", end = "")
@@ -118,7 +118,7 @@ def free_prob():
     for card in decklist:
         deck.add_card(card)
     # Amount of additional cards you can see from the deck if you hard fish for the pair
-    draw_limit = DISCARD_SIZE * DISCARDS * 0
+    draw_limit = DISCARD_SIZE * DISCARDS
 
     print("")
     print("Initial hand: ", end = "")
@@ -127,21 +127,40 @@ def free_prob():
     print("Deck size:", deck.length)
     print("\n")
 
-    checker = HandTypeTranslator()
-    # Get a valid hand to check
+    translator = HandTypeTranslator()
+
+    # Get a valid hand to check (translate using class)
     while True:
         checked_type = input("Select the handtype which you would like to check: ")
 
-        if checked_type in checker.hand_dict:
-            checked_type = checker[checked_type]
+        if checked_type in translator.hand_dict:
+            checked_type = translator.translate(checked_type)
             break
         else:
             print("That is not a valid type.\n")
 
+    # TODO: Check the hand before accessing probability,
+    # determine whether the selected type already exists in hand
+    # and which cards comprise it.
+    # Perform a check for probability for each card in hand
+    data = {}
     for card in hand:
         probability = CHECKER.check_probability(
-            card, checked_type, deck, draw_limit
+            deck, card, draw_limit, checked_type
         )
+        data[card] = probability
+    
+    # Display probabilities for each card
+    print(f"PROBABILITY OF {checked_type}: ")
+    for key, value in data.items():
+        print(f"For ", end="")
+        display_card(key)
+        print(": ", end="")
+        percent_probability = str(round(value["probability"] * 100, 2))
+        print(f"{percent_probability}% probability of a {checked_type} with: ", end="")
+        display_cards(value["valid_cards"])
+        print("")
+
 
     
 # Simulate playing a blind
