@@ -8,6 +8,12 @@ from classes.classes import Card, Deck
 #                   "valid_cards": array of Card() indicating cards that can be drawn to match
 #                   }
 
+# DONE:
+# HIGHCARD: DONE
+# PAIR: DONE
+# TWOPAIR: TODO
+# THREE_OF_A_KIND
+
 def calculate_high_card_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
     output["probability"] = 1.0
@@ -52,6 +58,14 @@ def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
 
 def calculate_two_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) == 1 or draw_limit < 1:
+        output["probability"] = 0.0
+        output["valid_cards"] = []
+        return output
+    
+    # See how many three card combinations there are for each card in hand (all cards in deck)
+    all_observations = deck.length
+    valid_observations = len(deck.ranks[card.rank])
 
     output["probability"] = 0
     output["valid_cards"] = []
