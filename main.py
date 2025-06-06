@@ -97,6 +97,7 @@ def pair_prob():
     print("PROBABILITY FOR PAIRS:")
     print("")
     print(f"With {DISCARD_SIZE} discard size and {DISCARDS} discards, the probabilities are: \n")
+
     for key, value in probabilities.items():
         print(f"For ", end="")
         display_card(key)
@@ -151,7 +152,7 @@ def free_prob():
         data[card] = probability
     
     # Display probabilities for each card
-    print(f"PROBABILITY OF {checked_type}: ")
+    print(f"PROBABILITY OF DRAWING {checked_type} for each card: ")
     for key, value in data.items():
         print(f"For ", end="")
         display_card(key)

@@ -30,75 +30,90 @@ def calculate_high_card_probability(deck: Deck, card: Card, draw_limit: int):
 def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
 
-    # Return if there is no match in the deck
-    if card.rank not in deck.ranks:
-        output["probability"] = 0.0
-        output["valid_cards"] = []
-        return output
-
-    # See how many two-card combinations there are for each card in hand (all cards in deck)
-    all_observations = deck.length
-    valid_observations = len(deck.ranks[card.rank])
-
-    if valid_observations == 0 or draw_limit == 0 or all_observations == 0:
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) == 1 or draw_limit < 1:
         output["probability"] = 0.0
         output["valid_cards"] = []
         return output
     
-    # Establish the minimum amount of cards we can draw for the card
-    draws = min(draw_limit, all_observations)
-    prob_no_match = 1.0
-
-    # Calculate the probability that we DON'T draw a pair
-    for i in range(draws):
-        if all_observations - i <= 0:
-            break
-            
-        prob_no_match *= (all_observations - valid_observations - i) / (all_observations - i)
+    # Calculate hypergeometric PEF for drawing three cards
+    probability = hypergeometric(
+        N = deck.length, 
+        K = len(deck.ranks[card.rank]),
+        n = draw_limit,
+        k = 2)
     
-    # Compute the probability
-    output["probability"] = 1 - prob_no_match
+    output["probability"] = probability
+    output["valid_cards"] = [deck.ranks[card.rank]]
 
-    valid_cards = deck.ranks[card.rank].copy()
-    output["valid_cards"] = valid_cards
     return output
 
 
 def calculate_two_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) == 2 or draw_limit < 2:
-        output["probability"] = 0.0
-        output["valid_cards"] = []
-        return output
-    
-    # See how many three card combinations there are for each card in hand (all cards in deck)
-    all_observations = deck.length
-    valid_observations = len(deck.ranks[card.rank])
 
-    output["probability"] = 0
+    
+    output["probability"] = 0.0
     output["valid_cards"] = []
     return output
 
 def calculate_three_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    output["probability"] = 0
-    output["valid_cards"] = []
+
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) < 2 or draw_limit < 2:
+        output["probability"] = 0.0
+        output["valid_cards"] = []
+        return output
+    
+    # Calculate hypergeometric PEF for drawing three cards
+    probability = hypergeometric(
+        N = deck.length, 
+        K = len(deck.ranks[card.rank]),
+        n = draw_limit,
+        k = 2)
+    
+    output["probability"] = probability
+    output["valid_cards"] = deck.ranks[card.rank]
     return output
 
 
 def calculate_four_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    output["probability"] = 0
-    output["valid_cards"] = []
+
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) < 3 or draw_limit < 3:
+        output["probability"] = 0.0
+        output["valid_cards"] = []
+        return output
+    
+    # Calculate hypergeometric PEF for drawing three cards
+    probability = hypergeometric(
+        N = deck.length, 
+        K = len(deck.ranks[card.rank]),
+        n = draw_limit,
+        k = 3)
+    
+    output["probability"] = probability
+    output["valid_cards"] = deck.ranks[card.rank]
     return output
 
 
 def calculate_flush_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    output["probability"] = 0
-    output["valid_cards"] = []
-    return output
 
+    if card.rank not in deck.ranks or len(deck.suits[card.suit]) < 4 or draw_limit < 4:
+        output["probability"] = 0.0
+        output["valid_cards"] = []
+        return output
+    
+    # Calculate hypergeometric PEF for drawing three cards
+    probability = hypergeometric(
+        N = deck.length, 
+        K = len(deck.suits[card.suit]),
+        n = draw_limit,
+        k = 4)
+    
+    output["probability"] = probability
+    output["valid_cards"] = deck.ranks[card.rank]
+    return output
 
 def calculate_full_house_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}

@@ -3,7 +3,19 @@ from math import comb
 # Function to calculate probability using hypergeometric distribution
 def hypergeometric(N: int, K: int, n: int, k: int) -> float:
     """
-    P(X = k) = [C(K, k) * C(N - K, n - k)] / C(N, n)
+    Calculates the probability of drawing exactly k successes from a population using the hypergeometric distribution.
+
+    Args:
+        N (int): Total population size.
+        K (int): Number of success states in the population.
+        n (int): Number of draws.
+        k (int): Desired number of successful outcomes.
+
+    Returns:
+        float: The probability of exactly k successes in n draws from a population of size N with K successes.
+        
+    Formula:
+        P(X = k) = [C(K, k) * C(N - K, n - k)] / C(N, n)
     """
     if k > K or n > N or (n - k) > (N - K):
         return 0.0  # Impossible case
