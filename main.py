@@ -162,8 +162,6 @@ def free_prob():
         display_cards(value["valid_cards"])
         print("")
 
-
-
 # Simulate playing a blind
 # TODO: Support discarding
 def play_blind():

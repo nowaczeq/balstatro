@@ -1,5 +1,5 @@
 from classes.classes import Card, Deck
-from calculations import hypergeometric
+from calculations import hypergeometric, multiv_hypergeometric
 
 
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
@@ -19,7 +19,10 @@ from calculations import hypergeometric
 # HIGHCARD: DONE
 # PAIR: DONE
 # TWOPAIR: TODO
-# THREE_OF_A_KIND
+# THREE_OF_A_KIND: DONE
+# FOUR_OF_A_KIND: DONE
+# FLUSH: DONE
+# FIVE_OF_A_KIND: DONE
 
 def calculate_high_card_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
@@ -138,10 +141,22 @@ def calculate_straight_flush_probability(deck: Deck, card: Card, draw_limit: int
 
 def calculate_five_of_a_kind_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    output["probability"] = 0
-    output["valid_cards"] = []
-    return output
 
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) < 4 or draw_limit < 4:
+        output["probability"] = 0.0
+        output["valid_cards"] = []
+        return output
+    
+    # Calculate hypergeometric PEF for drawing three cards
+    probability = hypergeometric(
+        N = deck.length, 
+        K = len(deck.ranks[card.rank]),
+        n = draw_limit,
+        k = 4)
+    
+    output["probability"] = probability
+    output["valid_cards"] = deck.ranks[card.rank]
+    return output
 
 def calculate_flush_five_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
