@@ -1,15 +1,18 @@
+# Class storing the cards, with rank and chips separated
 class Card:
     def __init__(self):
         self.suit = ""
         self.rank = 0
         self.chips = 0
 
+# Class storing the types of hands, including their base mult and base chips
 class HandType:
     def __init__(self):
         self.cards = 1
         self.chips = 0
         self.mult = 0
 
+# Class storing the (remaining) deck, including easy access to cards separated by rank and suit, as well as the length
 class Deck:
     def __init__(self):
         self.ranks = {}
@@ -38,7 +41,8 @@ class Deck:
         self.suits[val.suit].remove(val)
         self.length -= 1
         return True
-        
+
+# Class for translating the names of hand types from natural language to one recognised by all functions
 
 class HandTypeTranslator:
     def __init__(self):

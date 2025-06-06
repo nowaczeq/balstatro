@@ -143,6 +143,7 @@ def free_prob():
     # TODO: Check the hand before accessing probability,
     # determine whether the selected type already exists in hand
     # and which cards comprise it.
+    
     # Perform a check for probability for each card in hand
     data = {}
     for card in hand:

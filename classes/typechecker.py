@@ -2,6 +2,7 @@ from classes.classes import Card, Deck
 import probability_functions.calculate_probability as cp
 import score_functions.handtests as ht
 
+# Class to allow for checking the score of a hand and the probability of drawing to a hand type from deck
 
 class TypeChecker:
     def __init__(self):

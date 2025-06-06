@@ -1,7 +1,7 @@
 from math import comb
 
 # Function to calculate probability using hypergeometric distribution
-def hypergeometric(N: int, K: int, n: int, k: int) -> float:
+def univ_hypergeometric(N: int, K: int, n: int, k: int) -> float:
     """
     Calculate the probability of drawing exactly k successes from a population using the hypergeometric distribution.
 

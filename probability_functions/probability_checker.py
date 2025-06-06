@@ -4,7 +4,7 @@ import time
 
 
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
-##########     HANDS [arrays of Cards]     #########
+##########     HANDS [arrays of Cards()]     #########
 
 # Check how many cards in the deck would make a pair
 def check_hands_pair_probability(hand, deck: Deck, draw_limit: int):
@@ -23,6 +23,7 @@ def check_hands_pair_probability(hand, deck: Deck, draw_limit: int):
                 probabilities[hand_card]["valid_cards"] = [candidate_card]
                 break
         
+        # If we didn't find a pair already in hand, check the probability of fishing it out of the deck
         if not pair_in_hand:
             print(f"Initiating analysis for {hand_card.rank} of {hand_card.suit} ")
             data = calculate_pair_probability(deck, hand_card, draw_limit)
