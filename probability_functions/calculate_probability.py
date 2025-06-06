@@ -3,6 +3,11 @@ from classes.classes import Card, Deck
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
 ##########     SINGLE CARDS     #########
 
+# inputs:
+#   deck: full deck of cards
+#   card: card for which we are calculating the probability
+#   draw_limit: the amount of cards we can draw in a round
+
 # returns output = {
 #                   "probability": float indicating probability of finding matching cards,
 #                   "valid_cards": array of Card() indicating cards that can be drawn to match

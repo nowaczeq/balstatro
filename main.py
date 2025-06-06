@@ -199,7 +199,9 @@ def play_hand(hand, requirement = 300):
     display_cards(hand)
     while True:
         played_type_name = input("Select the hand type that you'd like to play: ")
-        if played_type_name in CHECKER.score_checkers:
+        translator = HandTypeTranslator()
+        try:
+            played_type_name = translator.translate(played_type_name)
             # Create structure for played type
             played_hand = CHECKER.check_score(hand, played_type_name)
             if not played_hand["wins"]:
@@ -207,16 +209,13 @@ def play_hand(hand, requirement = 300):
             else:
                 print(f"You are holding a {played_type_name}")
                 break
-        else:
+        except ValueError:
             print("Not a valid type. ")
 
     # Calculate score for played hand
-    # Translate basic language to hand type language
-    translator = HandTypeTranslator()
-    handname = translator.translate(played_type_name)
 
-    if handname in HAND_TYPES:
-        hand = HAND_TYPES[handname]
+    if played_type_name in HAND_TYPES:
+        hand = HAND_TYPES[played_type_name]
     else:
         raise ValueError("Couldn't translate name of played hand")
 
