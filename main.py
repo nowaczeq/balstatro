@@ -162,7 +162,7 @@ def free_prob():
         print("")
 
 
-    
+
 # Simulate playing a blind
 # TODO: Support discarding
 def play_blind():
@@ -258,10 +258,9 @@ def populate_random_deck():
     return full_deck
 
 # Discard $size$ amount of cards from hand
+# returns hand after discarding and the discarded cards
+# TODO: Now discarded cards are random, change to to accept user input
 def discard(deck, hand, size):
-    """
-    Discard cards from the hand and return the new hand and the discarded cards.
-    """
     discarded = []
     if size > DISCARD_SIZE:
         size = DISCARD_SIZE
@@ -273,10 +272,8 @@ def discard(deck, hand, size):
     return hand, discarded
 
 # Draw amount of cards to hand
+# Returns hand after drawing and the deck after drawing
 def draw(amount, deck, hand):
-    """
-    Draw cards from the deck and add them to the hand.
-    """
     for _ in range(amount):
         if len(deck) == 0:
             print("Deck is empty!")

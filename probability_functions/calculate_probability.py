@@ -1,4 +1,6 @@
 from classes.classes import Card, Deck
+from calculations import hypergeometric
+
 
 # FUNCTIONS TO CALCULATE THE PROBABILITY FOR
 ##########     SINGLE CARDS     #########
@@ -54,6 +56,7 @@ def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
             
         prob_no_match *= (all_observations - valid_observations - i) / (all_observations - i)
     
+    # Compute the probability
     output["probability"] = 1 - prob_no_match
 
     valid_cards = deck.ranks[card.rank].copy()
@@ -63,7 +66,7 @@ def calculate_pair_probability(deck: Deck, card: Card, draw_limit: int):
 
 def calculate_two_pair_probability(deck: Deck, card: Card, draw_limit: int):
     output = {}
-    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) == 1 or draw_limit < 1:
+    if card.rank not in deck.ranks or len(deck.ranks[card.rank]) == 2 or draw_limit < 2:
         output["probability"] = 0.0
         output["valid_cards"] = []
         return output
